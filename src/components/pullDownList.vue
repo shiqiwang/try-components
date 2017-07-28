@@ -1,7 +1,12 @@
 <template>
   <div id="pull-down-list">
-    <div v-for="item in items">
-      <span class="selectImg">&#xe501</span>
+    <span id="addBtn" v-on:click.stop="isVisible()">&#xe501</span>
+    <div
+      v-for="item in items"
+      v-on:click.stop="selected(item)"
+      v-bind:style="styleObj"
+    >
+      <span class="selectImg" v-bind:class="item.classObj">&#xe501</span>
       <span v-bind:data-id="item.id" class="personName">{{item.name}}</span>
     </div>
   </div>
@@ -13,26 +18,47 @@
     data () {
       return {
         items: [
-          {id: 0, name: 'wang'},
-          {id: 1, name: 'shi'},
-          {id: 2, name: 'qi'}
+          {id: 0, name: 'wang', classObj: {isSelected: false}},
+          {id: 1, name: 'shi', classObj: {isSelected: false}},
+          {id: 2, name: 'qi', classObj: {isSelected: false}}
         ],
-        isSelected: false
+        styleObj: {
+          display: 'none'
+        }
+      }
+    },
+    methods: {
+      isVisible () {
+        this.styleObj = 'block'
+      },
+      selected (item) {
+        if (item.classObj.isSelected) {
+          item.classObj.isSelected = false
+        } else {
+          item.classObj.isSelected = true
+        }
       }
     }
-//    methods: {
-//      classChange: function () {
-//        if(this.isSelected) {
-//
-//        }
-//      }
-//    }
   }
+
 </script>
 
 <style>
   * {
     box-sizing: border-box;
+    user-select: none;
+  }
+
+  #pull-down-list #addBtn {
+    font-family: iconfont;
+    display: inline-block;
+    color: #0086b3;
+    padding: 10px 0;
+    font-size: 20px;
+  }
+
+  #pull-down-list #addBtn:hover {
+    cursor: pointer;
   }
 
   #pull-down-list {
@@ -48,6 +74,7 @@
 
   #pull-down-list div:hover {
     cursor: pointer;
+    background-color: #eee;
   }
 
   #pull-down-list div .selectImg {
@@ -58,6 +85,10 @@
     height: 40px;
     width: 40px;
     line-height:40px;
+  }
+
+  #pull-down-list div .isSelected {
+    color: #55a532;
   }
 
   #pull-down-list div .personName {
